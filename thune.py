@@ -1,8 +1,9 @@
+import numpy as np
 import pygame as pg
 
 pg.init()
 
-screen = pg.display.set_mode((540, 960))
+screen = pg.display.set_mode((960, 960))  # 540 * 960 px
 pg.display.set_caption("Test Pygame")
 
 clock = pg.time.Clock()
@@ -10,7 +11,7 @@ clock = pg.time.Clock()
 
 class Ball:
     def __init__(self):
-        self.ball_position = [270, 480]
+        self.ball_position = [480, 480]
         self.ball_velocity = [0, 0]
 
     def update(self):
@@ -31,12 +32,17 @@ while running:
         if event.type == pg.QUIT:
             running = False
 
+    screen.fill((0, 0, 0))
+
+    """ if np.linalg.norm(ball.ball_position - [480, 480]) + 44 >= 310:
+        pass """
+
     ball.update()
 
-    screen.fill((0, 0, 0))
+    pg.draw.circle(screen, (255, 255, 255), [480, 480], 300, 10)
     ball.draw(screen)
-    pg.display.flip()
 
+    pg.display.flip()
     clock.tick(60)
 
 pg.quit()

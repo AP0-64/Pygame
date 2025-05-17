@@ -32,22 +32,21 @@ class Ball:
     def bounce(self):
         direction = self.position - center
         distance = np.linalg.norm(direction)
-        if distance + 44 > 300:
-            if distance != 0:
-                normal = direction / distance
-                self.velocity = (
-                    self.velocity - 2 * np.dot(self.velocity, normal) * normal
-                )
-                self.position = center + normal * (300 - 44)
+        if distance + 44 > 300 and distance != 0:
+            normal = direction / distance
+            self.velocity = (
+                self.velocity - 2 * np.dot(self.velocity, normal) * normal
+            )
+            self.position = center + normal * (300 - 44)
 
-                # Jouer la prochaine note
-                if self.note_index < len(all_notes):
-                    note = all_notes[self.note_index]
-                    print(
-                        f"Note jouée : pitch={note.pitch}, "
-                        f"vélocité={note.velocity}"
-                    )
-                    self.note_index += 1
+            # Jouer la prochaine note
+            if self.note_index < len(all_notes):
+                note = all_notes[self.note_index]
+                print(
+                    f"Note jouée : pitch={note.pitch}, "
+                    f"vélocité={note.velocity}"
+                )
+                self.note_index += 1
 
 
 ball = Ball()

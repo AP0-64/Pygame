@@ -6,7 +6,7 @@ pg.init()
 
 screen = pg.display.set_mode((960, 960))
 center = np.array([x // 2 for x in screen.get_size()])
-pg.display.set_caption("Test Pygame")
+pg.display.set_caption("Pygame")
 
 clock = pg.time.Clock()
 

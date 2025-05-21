@@ -4,7 +4,7 @@ import pygame as pg
 
 pg.init()
 
-screen = pg.display.set_mode((960, 960))
+screen = pg.display.set_mode((800, 800))
 center = np.array([x // 2 for x in screen.get_size()])
 diameter = 44
 pg.display.set_caption("Pygame")
@@ -18,7 +18,7 @@ all_notes.sort(key=lambda n: n.start)
 
 class Ball:
     def __init__(self):
-        self.position = np.array([center[0], center[1]], dtype=float)
+        self.position = np.array([500, center[1]], dtype=float)
         self.velocity = np.array([0.0, 0.0])
         self.note_index = 0
 

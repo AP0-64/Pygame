@@ -6,6 +6,7 @@ pg.init()
 
 screen = pg.display.set_mode((960, 960))
 center = np.array([x // 2 for x in screen.get_size()])
+diameter = 44
 pg.display.set_caption("Pygame")
 
 clock = pg.time.Clock()
@@ -26,13 +27,18 @@ class Ball:
         self.position += self.velocity
 
     def draw(self, screen):
-        pg.draw.circle(screen, (255, 255, 255), self.position.astype(int), 44)
+        pg.draw.circle(
+            screen,
+            (255, 255, 255),
+            self.position.astype(int),
+            diameter
+        )
         pg.draw.circle(screen, (255, 0, 0), self.position.astype(int), 40)
 
     def bounce(self):
         direction = self.position - center
-        distance = np.linalg.norm(direction)
-        if distance + 44 > 300 and distance != 0:
+        distance = np.linalg.norm(direction) + diameter
+        if distance > 300 and distance != 0:
             normal = direction / distance
             self.velocity = (
                 self.velocity - 2 * np.dot(self.velocity, normal) * normal

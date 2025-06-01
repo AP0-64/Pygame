@@ -26,17 +26,31 @@ midi_out = pgm.Output(0)
 
 class Ball:
     def __init__(self):
-        self.position = np.array([500, center[1]], dtype=float)
+        self.position = np.array([700, 800], dtype=float)
         self.velocity = np.array([0.0, 0.0])
         self.note_index = 0
         self.note_end_time = 0
         self.current_note = None
+        self.trail = []
 
     def update(self):
-        self.velocity[1] += 0.3
+        self.velocity[1] += 0.2
         self.position += self.velocity
+        self.trail.insert(0, self.position.copy())
+        if len(self.trail) > 15:
+            self.trail.pop()
 
     def draw(self, screen):
+        for i, pos in enumerate(self.trail):
+            alpha = max(255 - i * 17, 0)
+            s = pg.Surface((diameter*2, diameter*2), pg.SRCALPHA)
+            pg.draw.circle(
+                s,
+                (255, 255, 255, alpha),
+                (diameter, diameter),
+                diameter
+            )
+            screen.blit(s, pos - diameter)
         pg.draw.circle(
             screen,
             (255, 255, 255),

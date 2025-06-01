@@ -80,3 +80,5 @@ while running:
     clock.tick(60)
 
 pg.quit()
+midi_out.close()
+pgm.quit()

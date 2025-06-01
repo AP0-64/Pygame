@@ -4,7 +4,7 @@ import pygame as pg
 
 pg.init()
 
-screen = pg.display.set_mode((800, 800))
+screen = pg.display.set_mode((1080, 1920))
 center = np.array([x // 2 for x in screen.get_size()])
 diameter = 44
 pg.display.set_caption("Pygame")
@@ -37,22 +37,14 @@ class Ball:
 
     def bounce(self):
         direction = self.position - center
-        distance = np.linalg.norm(direction) + diameter
-        if distance > 300 and distance != 0:
+        distance = np.linalg.norm(direction)
+        if distance + diameter >= 300 and distance != 0:
             normal = direction / distance
             self.velocity = (
-                self.velocity - 2 * np.dot(self.velocity, normal) * normal
+                self.velocity
+                - 2 * np.dot(self.velocity, normal) * normal
             )
             self.position = center + normal * (300 - 44)
-
-            # Jouer la prochaine note
-            if self.note_index < len(all_notes):
-                note = all_notes[self.note_index]
-                print(
-                    f"Note jouée : pitch={note.pitch}, "
-                    f"vélocité={note.velocity}"
-                )
-                self.note_index += 1
 
 
 ball = Ball()

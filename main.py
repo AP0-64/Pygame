@@ -14,7 +14,12 @@ pg.display.set_caption("Pygame")
 clock = pg.time.Clock()
 
 midi_data = pm.PrettyMIDI("I'm Blue.mid")
-all_notes = [n for inst in midi_data.instruments for n in inst.notes]
+all_notes = [
+    n
+    for inst in midi_data.instruments
+    for n in inst.notes
+    if n.pitch > 45
+]
 all_notes.sort(key=lambda n: n.start)
 midi_out = pgm.Output(0)
 
@@ -51,7 +56,7 @@ class Ball:
             )
             self.position = center + normal * (300 - 44)
             if self.note_index < len(all_notes):
-                note = all_notes[self.note_index]
+                note = all_notes[self.note_index + 21]
                 midi_out.note_on(note.pitch, note.velocity)
                 self.note_index += 1
                 self.note_end_time = pg.time.get_ticks() + 300

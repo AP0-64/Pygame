@@ -4,7 +4,7 @@ import pygame as pg
 
 pg.init()
 
-screen = pg.display.set_mode((800, 800))
+screen = pg.display.set_mode((1080, 1920))
 center = np.array([x // 2 for x in screen.get_size()])
 diameter = 44
 pg.display.set_caption("Pygame")

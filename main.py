@@ -32,44 +32,37 @@ class Ball:
         self.note_end_time = 0
         self.current_note = None
         self.trail = []
+        self.trail_timer = 0
         self.diameter = 44
         self.hue = 0.0  # de 0.0 à 1.0
         self.hue_step = 0.002  # plus petit = plus lent
-        self.trail_timer = 0
 
     def update(self):
         self.velocity[1] += 0.2
         self.position += self.velocity
         self.trail_timer += 1
         if self.trail_timer % 3 == 0:  # 1 point toutes les 3 frames
-            self.trail.insert(0, self.position.copy())
+            # Capture la couleur actuelle
+            r, g, b = colorsys.hsv_to_rgb(self.hue, 1.0, 1.0)
+            color = (int(r * 255), int(g * 255), int(b * 255))
+            self.trail.insert(0, (self.position.copy(), color))
 
     def draw(self, screen):
-        for i, pos in enumerate(self.trail):
-            alpha = max(255 - i * 17, 0)
-            s = pg.Surface((self.diameter*2, self.diameter*2), pg.SRCALPHA)
+        for pos, color in reversed(self.trail):
+            # Dessine le contour noir
             pg.draw.circle(
-                s,
-                (255, 255, 255, alpha),
-                (self.diameter, self.diameter),
-                self.diameter
+                screen,
+                (0, 0, 0),
+                pos.astype(int),
+                self.diameter // 2 + 2  # un peu plus grand pour liseré noir
             )
-            screen.blit(s, pos - self.diameter)
-        pg.draw.circle(
-            screen,
-            (255, 255, 255),
-            self.position.astype(int),
-            self.diameter
-        )
-        # Convertit HSL en RGB 0-255
-        r, g, b = colorsys.hsv_to_rgb(self.hue, 1.0, 1.0)
-        color = (int(r * 255), int(g * 255), int(b * 255))
-        pg.draw.circle(
-            screen,
-            color,
-            self.position.astype(int),
-            self.diameter - 1
-        )
+            # Dessine la couleur d'origine
+            pg.draw.circle(
+                screen,
+                color,
+                pos.astype(int),
+                self.diameter // 2
+            )
         self.hue += self.hue_step
         if self.hue > 1.0:
             self.hue -= 1.0

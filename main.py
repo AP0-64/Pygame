@@ -31,7 +31,7 @@ class Ball:
         self.note_end_time = 0
         self.current_note = None
         self.trail = []
-        self.diameter = 40
+        self.diameter = 44
 
     def update(self):
         self.velocity[1] += 0.2
@@ -53,9 +53,15 @@ class Ball:
             screen.blit(s, pos - self.diameter)
         pg.draw.circle(
             screen,
-            (255, 0, 0),
+            (255, 255, 255),
             self.position.astype(int),
             self.diameter
+        )
+        pg.draw.circle(
+            screen,
+            (255, 0, 0),
+            self.position.astype(int),
+            self.diameter - 1
         )
 
     def bounce(self):

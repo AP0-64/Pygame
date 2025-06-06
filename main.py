@@ -35,13 +35,14 @@ class Ball:
         self.diameter = 44
         self.hue = 0.0  # de 0.0 à 1.0
         self.hue_step = 0.002  # plus petit = plus lent
+        self.trail_timer = 0
 
     def update(self):
         self.velocity[1] += 0.2
         self.position += self.velocity
-        self.trail.insert(0, self.position.copy())
-        if len(self.trail) > 15:
-            self.trail.pop()
+        self.trail_timer += 1
+        if self.trail_timer % 3 == 0:  # 1 point toutes les 3 frames
+            self.trail.insert(0, self.position.copy())
 
     def draw(self, screen):
         for i, pos in enumerate(self.trail):
@@ -99,8 +100,6 @@ while running:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
-
-    screen.fill((0, 0, 0))
 
     ball.bounce()
     ball.update()

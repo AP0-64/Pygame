@@ -2,6 +2,7 @@ import numpy as np
 import pretty_midi as pm
 import pygame as pg
 import pygame.midi as pgm
+import colorsys
 
 pg.init()
 pgm.init()
@@ -32,6 +33,8 @@ class Ball:
         self.current_note = None
         self.trail = []
         self.diameter = 44
+        self.hue = 0.0  # de 0.0 à 1.0
+        self.hue_step = 0.002  # plus petit = plus lent
 
     def update(self):
         self.velocity[1] += 0.2
@@ -57,12 +60,18 @@ class Ball:
             self.position.astype(int),
             self.diameter
         )
+        # Convertit HSL en RGB 0-255
+        r, g, b = colorsys.hsv_to_rgb(self.hue, 1.0, 1.0)
+        color = (int(r * 255), int(g * 255), int(b * 255))
         pg.draw.circle(
             screen,
-            (255, 0, 0),
+            color,
             self.position.astype(int),
             self.diameter - 1
         )
+        self.hue += self.hue_step
+        if self.hue > 1.0:
+            self.hue -= 1.0
 
     def bounce(self):
         direction = self.position - center

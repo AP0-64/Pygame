@@ -8,7 +8,6 @@ pgm.init()
 
 screen = pg.display.set_mode((1080, 1920))
 center = np.array([x // 2 for x in screen.get_size()])
-diameter = 44
 pg.display.set_caption("Pygame")
 
 clock = pg.time.Clock()
@@ -32,6 +31,7 @@ class Ball:
         self.note_end_time = 0
         self.current_note = None
         self.trail = []
+        self.diameter = 44
 
     def update(self):
         self.velocity[1] += 0.2
@@ -43,32 +43,38 @@ class Ball:
     def draw(self, screen):
         for i, pos in enumerate(self.trail):
             alpha = max(255 - i * 17, 0)
-            s = pg.Surface((diameter*2, diameter*2), pg.SRCALPHA)
+            s = pg.Surface((self.diameter*2, self.diameter*2), pg.SRCALPHA)
             pg.draw.circle(
                 s,
                 (255, 255, 255, alpha),
-                (diameter, diameter),
-                diameter
+                (self.diameter, self.diameter),
+                self.diameter
             )
-            screen.blit(s, pos - diameter)
+            screen.blit(s, pos - self.diameter)
         pg.draw.circle(
             screen,
             (255, 255, 255),
             self.position.astype(int),
-            diameter
+            self.diameter
         )
-        pg.draw.circle(screen, (255, 0, 0), self.position.astype(int), 40)
+        pg.draw.circle(
+            screen,
+            (255, 0, 0),
+            self.position.astype(int),
+            self.diameter - 4
+        )
 
     def bounce(self):
         direction = self.position - center
         distance = np.linalg.norm(direction)
-        if distance + diameter >= 300 and distance != 0:
+        if distance + self.diameter >= 300 and distance != 0:
             normal = direction / distance
             self.velocity = (
                 self.velocity
                 - 2 * np.dot(self.velocity, normal) * normal
             )
-            self.position = center + normal * (300 - 44)
+            self.position = center + normal * (300 - self.diameter)
+            self.diameter += 1
             if self.note_index < len(all_notes):
                 note = all_notes[self.note_index + 21]
                 midi_out.note_on(note.pitch, note.velocity)
